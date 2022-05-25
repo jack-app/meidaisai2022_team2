@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Map</title>
+
+    <link rel="stylesheet" type="text/css" href="./test.css" />
+    <script src="./test.js"></script>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <p>出発地入力</p>
+    <input id="autocompleteDeparture" placeholder="出発地を入力" type="text">
+    <input type="button" value="入力した場所にスクロール"><input type="button" value="決定">
+    <p>目的地入力</p>
+    <input id="autocompleteArrival" placeholder="目的地を入力" type="text">
+    <input type="button" value="入力した場所にスクロール"><input type="button" value="決定">
+
+
+    <!--The div element for the map -->
+    <div id="map"></div> 
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsjSuB0DEYty6Qp2BhAgdZoVtHZKlzAF8&libraries=places&callback=initAutocomplete&callback=initMap&v=weekly"
+      async
+    ></script>
+  </body>
+</html>
