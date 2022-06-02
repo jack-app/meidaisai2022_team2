@@ -1,6 +1,4 @@
-function responce (){
-const checkDeparture = document.querySelector('#checkDeparture')
-checkDeparture.addEventListener('click', () => {
+function checkDeparture (){
         infoWindow.open(map);
           map.setCenter(departurePos);
 
@@ -8,15 +6,16 @@ checkDeparture.addEventListener('click', () => {
               position: departurePos,
               map: map,
              });
-};
-const checkArrival = document.querySelector('#checkArrival')
-checkDeparture.addEventListener('click', () => {
-        infoWindow.open(map);
+}
+
+function checkArrival (){
+          infoWindow.open(map);
           map.setCenter(arrivalPos);
 
           marker = new google.maps.Marker({
               position: arrivalPos,
               map: map,
              });
-};
-	}
+}
+
+  
