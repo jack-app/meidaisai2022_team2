@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Map</title>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="./map.css" />
+    <script src="./Initialization.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  </head>
+  <body>
+   <div class="form-group">
+    <h3>My Google Maps Demo</h3>
+    <p>出発地入力</p>
+    <input type="text" class="form-control" id="departure" placeholder="出発地を入力">
+    <input type="button" id="checkDeparture" value="入力した場所にスクロール" onclick="checkDeparture()"><input type="button" id="decideDeparture" value="決定">
+    <input type="hidden" id="departureLat" name="departureLat" />
+    <input type="hidden" id="departureLng" name="departureLng" />
+
+    <p>目的地入力</p>
+    <input type="text" class="form-control" id="arrival" placeholder="目的地を入力">
+    <input type="button" id="checkArrival" value="入力した場所にスクロール" onclick="checkArrival()">
+    <input type="button" id="decideArrival" value="決定">
+    <input type="hidden" id="arrivalLat" name="arrivalLat" />
+    <input type="hidden" id="arrivalLng" name="arrivalLng" />
+    </div>
+    <script src="./response.js"></script>
+    <!--The div element for the map -->
+    <div id="map"></div> 
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&libraries=places&callback=initAutocomplete&callback=initMap&v=weekly"
+      ></script>
+    <script src="./autocomplete.js"></script>
+    <script src="./autocomplete2.js"></script>
+
+  </body>
+</html>
