@@ -1,27 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- <link rel="stylesheet" href="./css/reset.css" /> -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="icon" href="" type="image/svg+xml" />
+    <link rel="icon alternate" href="" type="image/png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://example.com" />
+    <meta property="og:site_name" content="" />
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="https://example.com/images/ogp.png" />
+    <meta property="og:image:alt" content="" />
+    <meta property="og:image.width" content="1200" />
+    <meta property="og:image.height" content="630" />
     <title>Add Map</title>
 
     <link rel="stylesheet" type="text/css" href="./test.css" />
     <script src="./test.js"></script>
   </head>
   <body>
-    <h3>My Google Maps Demo</h3>
-    <p>出発地入力</p>
-    <input id="autocompleteDeparture" placeholder="出発地を入力" type="text">
-    <input type="button" value="入力した場所にスクロール"><input type="button" value="決定">
-    <p>目的地入力</p>
-    <input id="autocompleteArrival" placeholder="目的地を入力" type="text">
-    <input type="button" value="入力した場所にスクロール"><input type="button" value="決定">
+    <header class="paseHeader">
+      <div class="headerContainer">
+        <h1><span>My Google Maps Demo</span></h1>
+        <!-- <p>説明文</p> -->
+      </div>
+    </header>
 
+    <main class="paseMain">
+      <div class="mainContainer">
+        <p>出発地入力</p>
+        <input
+          id="autocompleteDeparture"
+          placeholder="出発地を入力"
+          type="text"
+        />
+        <input type="button" value="入力した場所にスクロール" /><input
+          type="button"
+          value="決定"
+        />
+        <p>目的地入力</p>
+        <input
+          id="autocompleteArrival"
+          placeholder="目的地を入力"
+          type="text"
+        />
+        <input type="button" value="入力した場所にスクロール" /><input
+          type="button"
+          value="決定"
+        />
 
-    <!--The div element for the map -->
-    <div id="map"></div> 
+        <!--The div element for the map -->
+        <div id="map"></div>
+      </div>
+    </main>
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsjSuB0DEYty6Qp2BhAgdZoVtHZKlzAF8&libraries=places&callback=initAutocomplete&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&libraries=places&callback=initAutocomplete&callback=initMap&v=weekly"
       async
     ></script>
   </body>
