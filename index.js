@@ -13,20 +13,6 @@ async function reRender() {
   if (myMarkers.length == 1) {
     return;
   }
-  //中継地点の座標を決定
-  /*var pos1 = myMarkers[0].getPosition();
-  var pos2 = myMarkers[1].getPosition();
-  var a_lat = pos1.lat();
-  var a_lon = pos1.lng();
-  var b_lat = pos2.lat();
-  var b_lon = pos2.lng();
-  var radius = ((a_lat - b_lat) ** 2 + (a_lon - b_lon) ** 2) / 2;
-  var cen_lat = (a_lat + b_lat) / 2;
-  var cen_lon = (a_lon + b_lon) / 2;
-  var r = Math.random();
-  var angle = Math.random() * 2 * Math.PI;
-  var new_lat = cen_lat + r * radius * Math.cos(angle); //中継地点の緯度
-  var new_lon = cen_lon + r * radius * Math.sin(angle); //中継地点の経度*/
   var pos1 = myMarkers[0].getPosition();
   var pos2 = myMarkers[1].getPosition();
   a_lat = pos1.lat();
