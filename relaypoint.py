@@ -2,10 +2,20 @@ import numpy as np
 import random
 import math
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
-@app.get("/")
-async def calc_xy(a_lat: int = 0, a_lon: int = 0, b_lat: int = 0, b_lon: int = 0):
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/relaypoint/{a_lat}/{a_lon}/{b_lat}/{b_lon}")
+async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: float = 0):
     # 緯度経度・平面直角座標系原点をラジアンに直す
 	cen_lat = (a_lat + b_lat) / 2
 	cen_lon = (a_lon + b_lon) / 2

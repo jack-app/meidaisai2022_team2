@@ -7,14 +7,14 @@ var a_lat;
 var a_lon;
 var b_lat;
 var b_lon;
-//const SERVER_URL = "http://127.0.0.1:8000/"
+const SERVER_URL = "http://127.0.0.1:8000/relaypoint";
 
-function reRender() {
+async function reRender() {
   if (myMarkers.length == 1) {
     return;
   }
   //中継地点の座標を決定
-  var pos1 = myMarkers[0].getPosition();
+  /*var pos1 = myMarkers[0].getPosition();
   var pos2 = myMarkers[1].getPosition();
   var a_lat = pos1.lat();
   var a_lon = pos1.lng();
@@ -26,17 +26,19 @@ function reRender() {
   var r = Math.random();
   var angle = Math.random() * 2 * Math.PI;
   var new_lat = cen_lat + r * radius * Math.cos(angle); //中継地点の緯度
-  var new_lon = cen_lon + r * radius * Math.sin(angle); //中継地点の経度
-  /*var pos1 = myMarkers[0].getPosition();
+  var new_lon = cen_lon + r * radius * Math.sin(angle); //中継地点の経度*/
+  var pos1 = myMarkers[0].getPosition();
   var pos2 = myMarkers[1].getPosition();
   a_lat = pos1.lat();
   a_lon = pos1.lng();
   b_lat = pos2.lat();
   b_lon = pos2.lng();
-  var res = await fetch(new URL(`${SERVER_URL}/?a_lat=${a_lat}&a_lon=${a_lon}&b_lat=${b_lat}&b_lon=${b_lon}`))
-  var data = await res.json()
-  var new_lat=data.new_lat
-  var new_lon=data.new_lon*/
+  var res = await fetch(
+    new URL(`${SERVER_URL}/${a_lat}/${a_lon}/${b_lat}/${b_lon}`)
+  );
+  var data = await res.json();
+  var new_lat = data.new_lat;
+  var new_lon = data.new_lon;
   if (marker.length == 1) {
     marker.shift().setMap(null);
   }
