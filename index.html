@@ -1,43 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
-    <title>Add Map</title>
-    <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" href="./map.css" />
+    <!-- <link rel="stylesheet" href="./css/reset.css" /> -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/map.css" />
+
+    <link rel="icon" href="" type="image/svg+xml" />
+    <link rel="icon alternate" href="" type="image/png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://example.com" />
+    <meta property="og:site_name" content="" />
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="https://example.com/images/ogp.png" />
+    <meta property="og:image:alt" content="" />
+    <meta property="og:image.width" content="1200" />
+    <meta property="og:image.height" content="630" />
+    <title>Add Map</title>
+
     <script src="./Initialization.js"></script>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
   </head>
   <body>
-   <div class="form-group">
-    <h3>My Google Maps Demo</h3>
-    <p>出発地入力</p>
-    <input type="text" class="form-control" id="departure" placeholder="出発地を入力">
-    <input type="button" id="checkDeparture" value="入力した場所にスクロール" onclick="checkDeparture()"><input type="button" id="decideDeparture" value="決定">
-    <input type="hidden" id="departureLat" name="departureLat" />
-    <input type="hidden" id="departureLng" name="departureLng" />
+    <header class="paseHeader">
+      <div class="headerContainer">
+        <h1><span>My Google Maps Demo</span></h1>
+        <!-- <p>説明文</p> -->
+      </div>
+    </header>
 
-    <p>目的地入力</p>
-    <input type="text" class="form-control" id="arrival" placeholder="目的地を入力">
-    <input type="button" id="checkArrival" value="入力した場所にスクロール" onclick="checkArrival()">
-    <input type="button" id="decideArrival" value="決定">
-    <input type="hidden" id="arrivalLat" name="arrivalLat" />
-    <input type="hidden" id="arrivalLng" name="arrivalLng" />
-    </div>
-    <script src="./response.js"></script>
-    <!--The div element for the map -->
-    <div id="map"></div> 
+    <main class="paseMain">
+      <div class="mainContainer">
+        <div class="form-group">
+          <p>出発地入力</p>
+          <input
+            type="text"
+            class="form-control"
+            id="departure"
+            placeholder="出発地を入力"
+          />
+          <input
+            type="button"
+            id="checkDeparture"
+            value="入力した場所にスクロール"
+            onclick="checkDeparture()"
+          /><input type="button" id="decideDeparture" value="決定" />
+          <input type="hidden" id="departureLat" name="departureLat" />
+          <input type="hidden" id="departureLng" name="departureLng" />
+
+          <p>目的地入力</p>
+          <input
+            type="text"
+            class="form-control"
+            id="arrival"
+            placeholder="目的地を入力"
+          />
+          <input
+            type="button"
+            id="checkArrival"
+            value="入力した場所にスクロール"
+            onclick="checkArrival()"
+          />
+          <input type="button" id="decideArrival" value="決定" />
+          <input type="hidden" id="arrivalLat" name="arrivalLat" />
+          <input type="hidden" id="arrivalLng" name="arrivalLng" />
+        </div>
+        <script src="./response.js"></script>
+        <!--The div element for the map -->
+        <div id="map"></div>
+      </div>
+    </main>
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script type="text/javascript"
+    <script
+      type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&libraries=places&callback=initAutocomplete&callback=initMap&v=weekly"
-      ></script>
+    ></script>
     <script src="./autocomplete.js"></script>
     <script src="./autocomplete2.js"></script>
-
   </body>
 </html>
