@@ -200,7 +200,7 @@ function initialize() {
     "place_changed",
     function () {
       var placeDeparture = autocompleteDeparture.getPlace();
-      desMarker(placeDeparture.geometry.location);
+      depMarker(placeDeparture.geometry.location);
     }
   );
 }
@@ -214,7 +214,7 @@ function initialize2() {
     "place_changed",
     function () {
       var placeArrival = autocompleteArrival.getPlace();
-      depMarker(placeArrival.geometry.location);
+      desMarker(placeArrival.geometry.location);
     }
   );
 }
