@@ -1,8 +1,10 @@
+from cgitb import html
 import numpy as np
 import random
 import math
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 
 
@@ -13,6 +15,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 @app.get("/relaypoint/{a_lat}/{a_lon}/{b_lat}/{b_lon}")
 async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: float = 0):
