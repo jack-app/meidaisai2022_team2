@@ -120,11 +120,44 @@ $(document).ready(function () {
     mapTypeControl: true,
     scaleControl: true,
     navigationControlOptions: true,
+    gestureHandling: "greedy",
     disableDoubleClickZoom: true,
     scrollwheel: false,
     zIndex: 0,
   };
   myMap = new google.maps.Map(document.getElementById("map_canvas"), opts);
+  infoWindow = new google.maps.InfoWindow();
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        infoWindow.open(myMap);
+        myMap.setCenter(pos);
+
+        marker = new google.maps.Marker({
+          position: pos,
+          map: myMap,
+          draggable: true,
+        });
+        marker.setMap(myMap);
+        google.maps.event.addListener(marker, "dragend", function (mouseEvent) {
+          reRender();
+        });
+        departure.push(marker);
+      },
+      () => {
+        handleLocationError(true, infoWindow, myMap.getCenter());
+      }
+    );
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, myMap.getCenter());
+  }
+
   for (var i in mm) {
     putMarker(mm[i]);
   }
@@ -140,6 +173,15 @@ $(document).ready(function () {
   document.getElementById("journey").disabled = true;
   document.getElementById("distance").disabled = true;
 });
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(
+    browserHasGeolocation
+      ? "Error: The Geolocation service failed."
+      : "Error: Your browser doesn't support geolocation."
+  );
+  infoWindow.open(map);
+}
 function initialize() {
   var inputDeparture = document.getElementById("departure");
   var autocompleteDeparture = new google.maps.places.Autocomplete(
