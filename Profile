@@ -1,1 +1,1 @@
-web:  uvicorn  relaypoint:app --reload --host=127.0.0.1 --port=${PORT:-8000}
+web:  uvicorn  relaypoint:app --reload
