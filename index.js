@@ -9,12 +9,12 @@ var dep_lon;
 var des_lat;
 var des_lon;
 var search_count = 0;
-const search_limit = 30;
+const search_limit = 5;
 const SERVER_URL = "http://127.0.0.1:8000/relaypoint";
 
 //ルートの計算
 async function reRender() {
-  var search_count = 0;
+  search_count += 1;
   if (departure.length != 1 || destination.length != 1) {
     return;
   }
@@ -30,16 +30,6 @@ async function reRender() {
   var data = await res.json();
   var rel_lat = data.rel_lat;
   var rel_lon = data.rel_lon;
-  if (relaypoint.length == 1) {
-    relaypoint.shift().setMap(null);
-  }
-  var neoMarker = new google.maps.Marker({
-    position: new google.maps.LatLng(rel_lat, rel_lon),
-    map: myMap,
-    draggable: false,
-  });
-  neoMarker.setMap(myMap);
-  relaypoint.push(neoMarker);
   var myTravelMode =
     document.getElementById("TravelMode").value == "DRIVING"
       ? google.maps.DirectionsTravelMode.DRIVING
@@ -58,14 +48,26 @@ async function reRender() {
     },
     function (result, status) {
       if (status == google.maps.DirectionsStatus.OK) {
+        search_count = 0;
         directionsRenderer.setDirections(result);
         document.getElementById("journey").value =
           result.routes[0].legs[0].distance.value >= 1000
             ? result.routes[0].legs[0].distance.value / 1000 + "km"
             : result.routes[0].legs[0].distance.value + "m";
-      } else if (search_count < 30) {
+        if (relaypoint.length == 1) {
+          relaypoint.shift().setMap(null);
+        }
+        var neoMarker = new google.maps.Marker({
+          position: new google.maps.LatLng(rel_lat, rel_lon),
+          map: myMap,
+          draggable: false,
+        });
+        neoMarker.setMap(myMap);
+        relaypoint.push(neoMarker);
+      } else if (search_count < search_limit) {
         reRender();
       } else {
+        search_count = 0;
         alert("ルート検索できませんでした");
       }
     }
