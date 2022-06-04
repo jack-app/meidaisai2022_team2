@@ -25,7 +25,9 @@ async function reRender() {
   des_lat = pos2.lat();
   des_lon = pos2.lng();
   var res = await fetch(
-    new URL(`${SERVER_URL}/${dep_lat}/${dep_lon}/${des_lat}/${des_lon}`)
+    new URL(
+      `${SERVER_URL}/relaypoint/${dep_lat}/${dep_lon}/${des_lat}/${des_lon}`
+    )
   );
   var data = await res.json();
   var rel_lat = data.rel_lat;
