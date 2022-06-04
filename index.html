@@ -53,7 +53,6 @@
             placeholder="出発地を入力"
           />
 
-
           <p>目的地入力</p>
           <input
             type="text"
@@ -61,6 +60,14 @@
             id="arrival"
             placeholder="目的地を入力"
           />
+          <p>
+            <input
+              type="button"
+              id="re-load"
+              value="ルート再検索"
+              onclick="reRender()"
+            />
+          </p>
           <p>
             移動手段
             <select id="TravelMode" onchange="reRender()">

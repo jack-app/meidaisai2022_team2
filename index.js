@@ -10,6 +10,7 @@ var des_lat;
 var des_lon;
 const SERVER_URL = "http://127.0.0.1:8000/relaypoint";
 
+//ルートの計算
 async function reRender() {
   if (departure.length != 1 || destination.length != 1) {
     return;
@@ -74,6 +75,7 @@ async function reRender() {
   document.getElementById("distance").value =
     d >= 1000 ? d / 1000 + "km" : d + "m";
 }
+//目的地のマーカーをつける
 function desMarker() {
   var neoMarker = new google.maps.Marker({
     position: arguments[0],
@@ -92,6 +94,7 @@ function desMarker() {
   }
   reRender();
 }
+//出発地点のマーカーをつける
 function depMarker() {
   var neoMarker = new google.maps.Marker({
     position: arguments[0],
@@ -110,6 +113,39 @@ function depMarker() {
   }
   reRender();
 }
+//出発地点の入力
+function initialize() {
+  var inputDeparture = document.getElementById("departure");
+  var autocompleteDeparture = new google.maps.places.Autocomplete(
+    inputDeparture
+  );
+  google.maps.event.addListener(
+    autocompleteDeparture,
+    "place_changed",
+    function () {
+      var placeDeparture = autocompleteDeparture.getPlace();
+      depMarker(placeDeparture.geometry.location);
+    }
+  );
+}
+google.maps.event.addDomListener(window, "load", initialize);
+
+//目的地の入力
+function initialize2() {
+  var inputArrival = document.getElementById("arrival");
+  var autocompleteArrival = new google.maps.places.Autocomplete(inputArrival);
+  google.maps.event.addListener(
+    autocompleteArrival,
+    "place_changed",
+    function () {
+      var placeArrival = autocompleteArrival.getPlace();
+      desMarker(placeArrival.geometry.location);
+    }
+  );
+}
+
+google.maps.event.addDomListener(window, "load", initialize2);
+//ページ表示後に行なわれるやつ
 $(document).ready(function () {
   var param = new Array();
   var a = window.location.search.substring(1);
@@ -190,33 +226,3 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   );
   infoWindow.open(map);
 }
-function initialize() {
-  var inputDeparture = document.getElementById("departure");
-  var autocompleteDeparture = new google.maps.places.Autocomplete(
-    inputDeparture
-  );
-  google.maps.event.addListener(
-    autocompleteDeparture,
-    "place_changed",
-    function () {
-      var placeDeparture = autocompleteDeparture.getPlace();
-      depMarker(placeDeparture.geometry.location);
-    }
-  );
-}
-google.maps.event.addDomListener(window, "load", initialize);
-
-function initialize2() {
-  var inputArrival = document.getElementById("arrival");
-  var autocompleteArrival = new google.maps.places.Autocomplete(inputArrival);
-  google.maps.event.addListener(
-    autocompleteArrival,
-    "place_changed",
-    function () {
-      var placeArrival = autocompleteArrival.getPlace();
-      desMarker(placeArrival.geometry.location);
-    }
-  );
-}
-
-google.maps.event.addDomListener(window, "load", initialize2);
