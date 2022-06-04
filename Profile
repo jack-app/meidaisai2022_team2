@@ -1,1 +1,1 @@
-web:  uvicorn  relaypoint:app --reload
+web:  uvicorn  relaypoint:app --reload --host=127.0.0.1
