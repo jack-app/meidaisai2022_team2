@@ -8,10 +8,13 @@ var dep_lat;
 var dep_lon;
 var des_lat;
 var des_lon;
+var search_count = 0;
+const search_limit = 30;
 const SERVER_URL = "http://127.0.0.1:8000/relaypoint";
 
 //ルートの計算
 async function reRender() {
+  var search_count = 0;
   if (departure.length != 1 || destination.length != 1) {
     return;
   }
@@ -60,6 +63,8 @@ async function reRender() {
           result.routes[0].legs[0].distance.value >= 1000
             ? result.routes[0].legs[0].distance.value / 1000 + "km"
             : result.routes[0].legs[0].distance.value + "m";
+      } else if (search_count < 30) {
+        reRender();
       } else {
         alert("ルート検索できませんでした");
       }
