@@ -1,1 +1,1 @@
-web:  uvicorn  relaypoint:app --reload
+web: gunicorn -w 3 -k uvicorn.workers.UvicornWorker relaypoint:app
