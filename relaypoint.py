@@ -15,7 +15,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
 
 @app.get("/relaypoint/{a_lat}/{a_lon}/{b_lat}/{b_lon}")
 async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: float = 0):
@@ -136,3 +136,5 @@ async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: f
     # ラジアンを度になおしてreturn
 	return {"rel_lat":np.rad2deg(new_lat_rad), "rel_lon":np.rad2deg(new_lon_rad)} # [deg]
 	
+
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
