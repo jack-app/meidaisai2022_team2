@@ -131,7 +131,7 @@ async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: f
 	new_lon_rad = cen_lon_rad + np.arctan( np.sinh(eta2)/np.cos(xi2) ) # [rad]
 
     # ラジアンを度になおしてreturn
-	return {"new_lat":np.rad2deg(new_lat_rad), "new_lon":np.rad2deg(new_lon_rad)} # [deg]
+	return {"rel_lat":np.rad2deg(new_lat_rad), "rel_lon":np.rad2deg(new_lon_rad)} # [deg]
 	
 #new_lat,new_lon=calc_xy(35.150130, 136.967135, 35.165201, 136.877309)
 #print(f"{new_lat} {new_lon}")

@@ -1,51 +1,52 @@
 var myMap;
 var directionsRenderer;
 var directionsService = new google.maps.DirectionsService();
-var myMarkers = [];
-var marker = [];
-var a_lat;
-var a_lon;
-var b_lat;
-var b_lon;
+var departure = [];
+var destination = [];
+var relaypoint = [];
+var dep_lat;
+var dep_lon;
+var des_lat;
+var des_lon;
 const SERVER_URL = "http://127.0.0.1:8000/relaypoint";
 
 async function reRender() {
-  if (myMarkers.length == 1) {
+  if (departure.length != 1 || destination.length != 1) {
     return;
   }
-  var pos1 = myMarkers[0].getPosition();
-  var pos2 = myMarkers[1].getPosition();
-  a_lat = pos1.lat();
-  a_lon = pos1.lng();
-  b_lat = pos2.lat();
-  b_lon = pos2.lng();
+  var pos1 = departure[0].getPosition();
+  var pos2 = destination[0].getPosition();
+  dep_lat = pos1.lat();
+  dep_lon = pos1.lng();
+  des_lat = pos2.lat();
+  des_lon = pos2.lng();
   var res = await fetch(
-    new URL(`${SERVER_URL}/${a_lat}/${a_lon}/${b_lat}/${b_lon}`)
+    new URL(`${SERVER_URL}/${dep_lat}/${dep_lon}/${des_lat}/${des_lon}`)
   );
   var data = await res.json();
-  var new_lat = data.new_lat;
-  var new_lon = data.new_lon;
-  if (marker.length == 1) {
-    marker.shift().setMap(null);
+  var rel_lat = data.rel_lat;
+  var rel_lon = data.rel_lon;
+  if (relaypoint.length == 1) {
+    relaypoint.shift().setMap(null);
   }
   var neoMarker = new google.maps.Marker({
-    position: new google.maps.LatLng(new_lat, new_lon),
+    position: new google.maps.LatLng(rel_lat, rel_lon),
     map: myMap,
     draggable: false,
   });
   neoMarker.setMap(myMap);
-  marker.push(neoMarker);
+  relaypoint.push(neoMarker);
   var myTravelMode =
     document.getElementById("TravelMode").value == "DRIVING"
       ? google.maps.DirectionsTravelMode.DRIVING
       : google.maps.DirectionsTravelMode.WALKING;
   directionsService.route(
     {
-      origin: myMarkers[0].getPosition(),
-      destination: myMarkers[1].getPosition(),
+      origin: departure[0].getPosition(),
+      destination: destination[0].getPosition(),
       waypoints: [
         {
-          location: new google.maps.LatLng(new_lat, new_lon),
+          location: new google.maps.LatLng(rel_lat, rel_lon),
           stopover: false,
         },
       ],
@@ -65,8 +66,8 @@ async function reRender() {
   );
   var d = Math.round(
     google.maps.geometry.spherical.computeDistanceBetween(
-      myMarkers[0].getPosition(),
-      myMarkers[1].getPosition()
+      departure[0].getPosition(),
+      destination[0].getPosition()
     )
   );
 
@@ -83,11 +84,11 @@ function putMarker() {
   google.maps.event.addListener(neoMarker, "dragend", function (mouseEvent) {
     reRender();
   });
-  myMarkers.push(neoMarker);
-  if (myMarkers.length == 1) {
+  destination.push(neoMarker);
+  if (destination.length == 0) {
     return;
-  } else if (myMarkers.length == 3) {
-    myMarkers.shift().setMap(null);
+  } else if (destination.length == 2) {
+    destination.shift().setMap(null);
   }
   reRender();
 }
@@ -182,8 +183,6 @@ function initialize2() {
       };
     }
   );
-
-  console.log("test");
 }
 
 google.maps.event.addDomListener(window, "load", initialize2);
