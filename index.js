@@ -74,7 +74,7 @@ async function reRender() {
   document.getElementById("distance").value =
     d >= 1000 ? d / 1000 + "km" : d + "m";
 }
-function putMarker() {
+function desMarker() {
   var neoMarker = new google.maps.Marker({
     position: arguments[0],
     map: myMap,
@@ -92,7 +92,24 @@ function putMarker() {
   }
   reRender();
 }
-
+function depMarker() {
+  var neoMarker = new google.maps.Marker({
+    position: arguments[0],
+    map: myMap,
+    draggable: true,
+  });
+  neoMarker.setMap(myMap);
+  google.maps.event.addListener(neoMarker, "dragend", function (mouseEvent) {
+    reRender();
+  });
+  departure.push(neoMarker);
+  if (departure.length == 0) {
+    return;
+  } else if (departure.length == 2) {
+    departure.shift().setMap(null);
+  }
+  reRender();
+}
 $(document).ready(function () {
   var param = new Array();
   var a = window.location.search.substring(1);
@@ -138,16 +155,7 @@ $(document).ready(function () {
         infoWindow.open(myMap);
         myMap.setCenter(pos);
 
-        marker = new google.maps.Marker({
-          position: pos,
-          map: myMap,
-          draggable: true,
-        });
-        marker.setMap(myMap);
-        google.maps.event.addListener(marker, "dragend", function (mouseEvent) {
-          reRender();
-        });
-        departure.push(marker);
+        depMarker(pos);
       },
       () => {
         handleLocationError(true, infoWindow, myMap.getCenter());
@@ -159,12 +167,12 @@ $(document).ready(function () {
   }
 
   for (var i in mm) {
-    putMarker(mm[i]);
+    desMarker(mm[i]);
   }
   delete mm;
   // クリックでマーカー設置
   google.maps.event.addListener(myMap, "click", function (mouseEvent) {
-    putMarker(mouseEvent.latLng);
+    desMarker(mouseEvent.latLng);
   });
   directionsRenderer = new google.maps.DirectionsRenderer({
     map: myMap,
@@ -192,15 +200,7 @@ function initialize() {
     "place_changed",
     function () {
       var placeDeparture = autocompleteDeparture.getPlace();
-      document.getElementById("departureLat").value =
-        placeDeparture.geometry.location.lat();
-      document.getElementById("departureLng").value =
-        placeDeparture.geometry.location.lng();
-
-      departurePos = {
-        lat: placeDeparture.geometry.location.lat(),
-        lng: placeDeparture.geometry.location.lng(),
-      };
+      desMarker(placeDeparture.geometry.location);
     }
   );
 }
@@ -214,15 +214,7 @@ function initialize2() {
     "place_changed",
     function () {
       var placeArrival = autocompleteArrival.getPlace();
-      document.getElementById("arrivalLat").value =
-        placeArrival.geometry.location.lat();
-      document.getElementById("arrivalLng").value =
-        placeArrival.geometry.location.lng();
-
-      arrivalPos = {
-        lat: placeArrival.geometry.location.lat(),
-        lng: placeArrival.geometry.location.lng(),
-      };
+      depMarker(placeArrival.geometry.location);
     }
   );
 }
