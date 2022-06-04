@@ -26,18 +26,52 @@
         height: 26px;
       }
     </style>
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw"></script>
+    <!--script src="https://maps.google.com/maps/api/js?key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw"></script-->
+    <script
+      type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&libraries=places&callback=initAutocomplete&callback=initMap&v=weekly"
+    ></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="index.js"></script>
   </head>
   <body>
-    <div class="head-title">Google Maps APIを使ったサンプル。</div>
-    <p>
-      ルート案内と距離表示 <br /><span style="color: #b22222; font-weight: 700"
-        >最初にスタート地点とエンド地点をクリック</span
-      >
-      <br />マーカードラッグまたは地図上をクリックで情報が更新されます。
-    </p>
+    <div class="form-group">
+      <h3>My Google Maps Demo</h3>
+      <p>出発地入力</p>
+      <input
+        type="text"
+        class="form-control"
+        id="departure"
+        placeholder="出発地を入力"
+      />
+      <input
+        type="button"
+        id="checkDeparture"
+        value="入力した場所にスクロール"
+        onclick="checkDeparture()"
+      /><input type="button" id="decideDeparture" value="決定" />
+      <input type="hidden" id="departureLat" name="departureLat" />
+      <input type="hidden" id="departureLng" name="departureLng" />
+
+      <p>目的地入力</p>
+      <input
+        type="text"
+        class="form-control"
+        id="arrival"
+        placeholder="目的地を入力"
+      />
+      <input
+        type="button"
+        id="checkArrival"
+        value="入力した場所にスクロール"
+        onclick="checkArrival()"
+      />
+      <input type="button" id="decideArrival" value="決定" />
+      <input type="hidden" id="arrivalLat" name="arrivalLat" />
+      <input type="hidden" id="arrivalLng" name="arrivalLng" />
+    </div>
     <p>
       移動手段
       <select id="TravelMode" onchange="reRender()">
@@ -51,5 +85,6 @@
       <input type="text" id="distance" class="value" value="" />
     </p>
     <div id="map_canvas" style="width: 100%; height: 300px"></div>
+    <script src="./autocomplete.js"></script>
   </body>
 </html>
