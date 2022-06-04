@@ -10,7 +10,7 @@ var des_lat;
 var des_lon;
 var search_count = 0;
 const search_limit = 5;
-const SERVER_URL = "http://127.0.0.1:8000/relaypoint";
+const SERVER_URL = "https://yorimitizu.herokuapp.com/";
 
 //ルートの計算
 async function reRender() {
