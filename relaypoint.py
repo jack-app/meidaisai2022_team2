@@ -79,7 +79,8 @@ async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: f
 	y = A_ * (eta1 + np.sum(np.multiply(alpha_array[1:],
                                         np.multiply(np.cos(2*xi1*np.arange(1,6)),
                                                     np.sinh(2*eta1*np.arange(1,6)))))) # [m]
-	r = random.random()*((x**2+y**2)**0.5)
+	dist=(x**2+y**2)**0.5
+	r = random.random()*(dist)
 	angle = random.random()* 2 *math.pi
 	new_lon =  r * math.cos(angle)
 	new_lat =  r * math.sin(angle)
@@ -134,7 +135,7 @@ async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: f
 	new_lon_rad = cen_lon_rad + np.arctan( np.sinh(eta2)/np.cos(xi2) ) # [rad]
 
     # ラジアンを度になおしてreturn
-	return {"rel_lat":np.rad2deg(new_lat_rad), "rel_lon":np.rad2deg(new_lon_rad)} # [deg]
+	return {"rel_lat":np.rad2deg(new_lat_rad), "rel_lon":np.rad2deg(new_lon_rad),"dist":int(dist),"cen_lat":cen_lat,"cen_lon":cen_lon} # [deg]
 	
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
