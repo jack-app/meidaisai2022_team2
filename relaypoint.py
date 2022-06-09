@@ -5,6 +5,8 @@ import math
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+import requests
+import json
 app = FastAPI()
 
 
@@ -19,6 +21,7 @@ app.add_middleware(
 
 @app.get("/relaypoint/{a_lat}/{a_lon}/{b_lat}/{b_lon}")
 async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: float = 0):
+	rel_place=""
     # 緯度経度・平面直角座標系原点をラジアンに直す
 	cen_lat = (a_lat + b_lat) / 2
 	cen_lon = (a_lon + b_lon) / 2
@@ -79,11 +82,11 @@ async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: f
 	y = A_ * (eta1 + np.sum(np.multiply(alpha_array[1:],
                                         np.multiply(np.cos(2*xi1*np.arange(1,6)),
                                                     np.sinh(2*eta1*np.arange(1,6)))))) # [m]
-	r = random.random()*((x**2+y**2)**0.5)
+	dist=(x**2+y**2)**0.5
+	r = random.random()*(dist)
 	angle = random.random()* 2 *math.pi
 	new_lon =  r * math.cos(angle)
 	new_lat =  r * math.sin(angle)
-
     # 補助関数
 
 	def beta_array(n):
@@ -133,8 +136,28 @@ async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: f
     # (6) 緯度(latitude), 経度(longitude)の計算
 	new_lon_rad = cen_lon_rad + np.arctan( np.sinh(eta2)/np.cos(xi2) ) # [rad]
 
+	rel_lat=np.rad2deg(new_lat_rad)
+	rel_lon=np.rad2deg(new_lon_rad)
+
+	sites=[]
+	types=["store","cafe","spa","restaurant","book_store"]
+	for type in types:
+		url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={cen_lat}%2C{cen_lon}&radius={int(dist)}&type={type}&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&language=ja"
+		payload={}
+		headers = {}
+		response = requests.request("GET", url, headers=headers, data=payload)
+		d = response.json()
+		sites+=d["results"]
+	if len(sites)!=0:
+		place= random.choice(sites)
+		rel_place=place["name"]
+		print(place)
+		rel_lat=place["geometry"]["location"]["lat"]
+		rel_lon=place["geometry"]["location"]["lng"]
+
+
     # ラジアンを度になおしてreturn
-	return {"rel_lat":np.rad2deg(new_lat_rad), "rel_lon":np.rad2deg(new_lon_rad)} # [deg]
+	return {"rel_lat":rel_lat, "rel_lon":rel_lon,"rel_place":rel_place} # [deg]
 	
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
