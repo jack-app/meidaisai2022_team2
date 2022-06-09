@@ -4,6 +4,7 @@ var directionsService = new google.maps.DirectionsService();
 var departure = [];
 var destination = [];
 var relaypoint = [];
+var infowindow = [];
 var dep_lat;
 var dep_lon;
 var des_lat;
@@ -13,82 +14,12 @@ const search_limit = 5;
 //const SERVER_URL = "https://yorimitizu.herokuapp.com";
 const SERVER_URL = "http://127.0.0.1:8000";
 
-// 検索結果を受け取る
-function Result_Places(results, status) {
-  // Placesが検家に成功したかとマうかをチェック
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      // 検索結果の数だけ反復処理を変数placeに格納
-      var place = results[i];
-      createMarker({
-        text: place.name,
-        position: place.geometry.location,
-      });
-    }
-  }
-}
-
-//店の検索
-async function searchShop() {
-  if (departure.length != 1 || destination.length != 1) {
-    return;
-  }
-  var pos1 = departure[0].getPosition();
-  var pos2 = destination[0].getPosition();
-  dep_lat = pos1.lat();
-  dep_lon = pos1.lng();
-  des_lat = pos2.lat();
-  des_lon = pos2.lng();
-  var res = await fetch(
-    new URL(
-      `${SERVER_URL}/relaypoint/${dep_lat}/${dep_lon}/${des_lat}/${des_lon}`
-    )
-  );
-  var data = await res.json();
-  var cen_lat = data.cen_lat;
-  var cen_lon = data.cen_lon;
-  var radius = data.radius;
-  service = new google.maps.places.PlacesService(myMap);
-  var request = {
-    query: myword.value,
-    radius: radius,
-    location: new google.maps.LatLng(cen_lat, cen_lon),
-  };
-  service.textSearch(request, result_search);
-}
-
-// 検索の結果を受け取る
-function result_search(results, status) {
-  var bounds = new google.maps.LatLngBounds();
-  for (var i = 0; i < results.length; i++) {
-    createMarker({
-      position: results[i].geometry.location,
-      text: results[i].name,
-      map: myMap,
-    });
-    bounds.extend(results[i].geometry.location);
-  }
-  myMap.fitBounds(bounds);
-}
-
-function createMarker(options) {
-  // マップ情報を保持しているmyMapオブジェクトを指定
-  options.map = myMap;
-  // Markcrクラスのオブジェクトmarkerを作成
-  var marker = new google.maps.Marker(options);
-  // 各施設の吹き出し(情報ウインドウ)に表示させる処理
-  var infoWnd = new google.maps.InfoWindow();
-  infoWnd.setContent(options.text);
-  // addListenerメソッドを使ってイベントリスナーを登録
-  google.maps.event.addListener(marker, "click", function () {
-    infoWnd.open(myMap, marker);
-  });
-  return marker;
-}
-
 //ルートの計算
 async function reRender() {
   search_count += 1;
+  if (infowindow.length >= 1) {
+    infowindow.shift().close();
+  }
   if (departure.length != 1 || destination.length != 1) {
     return;
   }
@@ -106,6 +37,7 @@ async function reRender() {
   var data = await res.json();
   var rel_lat = data.rel_lat;
   var rel_lon = data.rel_lon;
+  var rel_place = data.rel_place;
   var myTravelMode =
     document.getElementById("TravelMode").value == "DRIVING"
       ? google.maps.DirectionsTravelMode.DRIVING
@@ -140,6 +72,22 @@ async function reRender() {
         });
         neoMarker.setMap(myMap);
         relaypoint.push(neoMarker);
+        if (rel_place != "") {
+          var url = `https://www.google.co.jp/maps/place?ll=${rel_lat},${rel_lon}&q=${encodeURI(
+            rel_place
+          )}&z=15`;
+          var contentStr =
+            `${rel_place}` +
+            "<p>" +
+            `<a href=${url} target="_blank" rel="noopener noreferrer">Googleマップで見る</a>` +
+            "</p>";
+          var info = new google.maps.InfoWindow({
+            content: contentStr,
+            position: new google.maps.LatLng(rel_lat, rel_lon),
+          });
+          infowindow.push(info);
+          info.open(myMap);
+        }
       } else if (search_count < search_limit) {
         reRender();
       } else {
@@ -230,10 +178,6 @@ function initialize2() {
 
 google.maps.event.addDomListener(window, "load", initialize2);
 
-const shop = document.getElementById("shop");
-shop.addEventListener("click", searchShop());
-const reload = document.getElementById("re-load");
-reload.addEventListener("click", reRender());
 //ページ表示後に行なわれるやつ
 $(document).ready(function () {
   var param = new Array();
@@ -253,7 +197,7 @@ $(document).ready(function () {
   delete b;
   delete a;
   var opts = {
-    zoom: "z" in param && parseInt(param["z"]) >= 0 ? parseInt(param["z"]) : 11,
+    zoom: "z" in param && parseInt(param["z"]) >= 0 ? parseInt(param["z"]) : 15,
     center:
       "c" in param && param["c"].match(/^(-?\d+\.?\d*),(-?\d+\.?\d*)$/)
         ? (mapCenter = new google.maps.LatLng(RegExp.$1, RegExp.$2, true))
