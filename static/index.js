@@ -86,7 +86,7 @@ async function reRender() {
             position: new google.maps.LatLng(rel_lat, rel_lon),
           });
           infowindow.push(info);
-          info.open(myMap);
+          info.open({ anchor: relaypoint[0], myMap, shouldFocus: false });
         }
       } else if (search_count < search_limit) {
         reRender();

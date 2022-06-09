@@ -140,14 +140,13 @@ async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: f
 	rel_lon=np.rad2deg(new_lon_rad)
 
 	
-	url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={cen_lat}%2C{cen_lon}&radius={dist//2}&type=restaurant&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&language=ja"
+	url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={cen_lat}%2C{cen_lon}&radius={int(dist)}&type=store&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&language=ja"
 	payload={}
 	headers = {}
 
 	response = requests.request("GET", url, headers=headers, data=payload)
 	d = response.json()
 	result=d["results"]
-	print(url)
 	if len(result)!=0:
 		place= random.choice(result)
 		rel_place=place["name"]
