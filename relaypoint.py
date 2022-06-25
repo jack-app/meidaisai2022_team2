@@ -138,26 +138,8 @@ async def calc_xy(a_lat: float = 0, a_lon: float = 0, b_lat: float = 0, b_lon: f
 
 	rel_lat=np.rad2deg(new_lat_rad)
 	rel_lon=np.rad2deg(new_lon_rad)
-
-	sites=[]
-	types=["store","cafe","spa","restaurant","book_store"]
-	for type in types:
-		url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={cen_lat}%2C{cen_lon}&radius={int(dist)}&type={type}&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&language=ja"
-		payload={}
-		headers = {}
-		response = requests.request("GET", url, headers=headers, data=payload)
-		d = response.json()
-		sites+=d["results"]
-	if len(sites)!=0:
-		place= random.choice(sites)
-		rel_place=place["name"]
-		print(place)
-		rel_lat=place["geometry"]["location"]["lat"]
-		rel_lon=place["geometry"]["location"]["lng"]
-
-
     # ラジアンを度になおしてreturn
-	return {"rel_lat":rel_lat, "rel_lon":rel_lon,"rel_place":rel_place} # [deg]
+	return {"rel_lat":rel_lat, "rel_lon":rel_lon,"cen_lat":cen_lat,"cen_lon":cen_lon,"dist":dist} # [deg]
 	
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")

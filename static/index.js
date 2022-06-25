@@ -5,15 +5,38 @@ var departure = [];
 var destination = [];
 var relaypoint = [];
 var infowindow = [];
+var types = [];
 var dep_lat;
 var dep_lon;
 var des_lat;
 var des_lon;
 var search_count = 0;
 const search_limit = 5;
-const SERVER_URL = "https://yorimitizu.herokuapp.com";
-//const SERVER_URL = "http://127.0.0.1:8000";
+//const SERVER_URL = "https://yorimitizu.herokuapp.com";
+const SERVER_URL = "http://127.0.0.1:8000";
 
+function MultiSelect() {
+  var s;
+
+  var obj = frm.hoge.options;
+
+  var getIdx = new Array();
+
+  for (i = 0, n = 0; i < obj.length; i++) {
+    if (obj[i].selected) {
+      getIdx[n++] = i;
+    }
+  }
+
+  if (getIdx.length > 0) {
+    s = getIdx.length + 1;
+  }
+  if (3 <= s) {
+    alert("選択可能数は２です");
+
+    // ※①
+  }
+}
 //ルートの計算
 async function reRender() {
   search_count += 1;
@@ -37,7 +60,28 @@ async function reRender() {
   var data = await res.json();
   var rel_lat = data.rel_lat;
   var rel_lon = data.rel_lon;
-  var rel_place = data.rel_place;
+  /*
+  sites=[]
+	types=["store","cafe","spa","restaurant","book_store"]
+	for type in types:
+		url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={cen_lat}%2C{cen_lon}&radius={int(dist)}&type={type}&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw&language=ja"
+		payload={}
+		headers = {}
+		response = requests.request("GET", url, headers=headers, data=payload)
+		d = response.json()
+		sites+=d["results"]
+  if len(sites)!=0:
+		place= random.choice(sites)
+		rel_place=place["name"]
+		print(place)
+		rel_lat=place["geometry"]["location"]["lat"]
+		rel_lon=place["geometry"]["location"]["lng"]
+  */
+  var config = {
+    method: "get",
+    url: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522%2C151.1957362&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyBKL_sb1YxMUcpZdzr5pTFllKEmRdbYecw",
+    headers: {},
+  };
   var myTravelMode =
     document.getElementById("TravelMode").value == "DRIVING"
       ? google.maps.DirectionsTravelMode.DRIVING
@@ -178,6 +222,41 @@ function initialize2() {
 
 google.maps.event.addDomListener(window, "load", initialize2);
 
+function click_cb() {
+  //チェックカウント用変数
+  var check_count = 0;
+  // 箇所チェック数カウント
+  $(".input_item ul li").each(function () {
+    var parent_checkbox = $(this).children("input[type='checkbox']");
+    if (parent_checkbox.prop("checked")) {
+      check_count = check_count + 1;
+    }
+  });
+  // 0個のとき（チェックがすべて外れたとき）
+  if (check_count == 0) {
+    $(".input_item ul li").each(function () {
+      $(this).find(".locked").removeClass("locked");
+    });
+    // 3個以上の時（チェック可能上限数）
+  } else if (check_count > 2) {
+    $(".input_item ul li").each(function () {
+      // チェックされていないチェックボックスをロックする
+      if (!$(this).children("input[type='checkbox']").prop("checked")) {
+        $(this).children("input[type='checkbox']").prop("disabled", true);
+        $(this).addClass("locked");
+      }
+    });
+  } else {
+    $(".input_item ul li").each(function () {
+      // チェックされていないチェックボックスを選択可能にする
+      if (!$(this).children("input[type='checkbox']").prop("checked")) {
+        $(this).children("input[type='checkbox']").prop("disabled", false);
+        $(this).removeClass("locked");
+      }
+    });
+  }
+  return false;
+}
 //ページ表示後に行なわれるやつ
 $(document).ready(function () {
   var param = new Array();

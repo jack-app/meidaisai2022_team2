@@ -68,6 +68,52 @@
               onclick="reRender()"
             />
           </p>
+          <form method="post" name="chk_ctl">
+            <div class="input_item">
+              <ul>
+                <li>
+                  <input
+                    type="checkbox"
+                    id="box_1"
+                    value="1"
+                    onclick="click_cb();"
+                  /><label for="box_1" class="checkbox">野球</label>
+                </li>
+                <li>
+                  <input
+                    type="checkbox"
+                    id="box_2"
+                    value="2"
+                    onclick="click_cb();"
+                  /><label for="box_2" class="checkbox">サッカー</label>
+                </li>
+                <li>
+                  <input
+                    type="checkbox"
+                    id="box_3"
+                    value="3"
+                    onclick="click_cb();"
+                  /><label for="box_3" class="checkbox">バスケットボール</label>
+                </li>
+                <li>
+                  <input
+                    type="checkbox"
+                    id="box_4"
+                    value="4"
+                    onclick="click_cb();"
+                  /><label for="box_4" class="checkbox">バレーボール</label>
+                </li>
+                <li>
+                  <input
+                    type="checkbox"
+                    id="box_5"
+                    value="5"
+                    onclick="click_cb();"
+                  /><label for="box_5" class="checkbox">柔道</label>
+                </li>
+              </ul>
+            </div>
+          </form>
           <p>
             移動手段
             <select id="TravelMode" onchange="reRender()">
